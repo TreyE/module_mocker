@@ -1,7 +1,7 @@
 defmodule ModuleMocker.Interface do
   def add_call(called, method, args) do
     current_call_list = Map.get(called, method, [])
-    Map.put(called, method, [{args},current_call_list])
+    Map.put(called, method, [{args}|current_call_list])
   end
 
   def add_expect(expects, method, args) do
