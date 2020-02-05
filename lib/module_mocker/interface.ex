@@ -10,24 +10,11 @@ defmodule ModuleMocker.Interface do
   end
 
   def extend_allows(allows, method, args, value) do
-    current_arg_map = Map.get(allows, method, %{})
-    updated_arg_map = Map.put(current_arg_map, {args}, value)
-    Map.put(allows, method, updated_arg_map)
+    ModuleMocker.AllowedMethods.add(allows, method, args, value)
   end
 
   def check_allowed(allowed, method, args) do
-    case Map.get(allowed, method, nil) do
-      nil -> {:error, {:function_not_allowed, method}}
-      arg_mapping ->
-        case Map.has_key?(arg_mapping, {args}) do
-          false ->
-            case Map.has_key?(arg_mapping, {:any_args}) do
-              false -> {:error, {:no_matching_call, method, args}}
-              _  -> {:ok, Map.fetch!(arg_mapping, {:any_args})}
-            end
-          _ -> {:ok, Map.fetch!(arg_mapping, {args})}
-        end
-    end
+    ModuleMocker.AllowedMethods.check(allowed, method, args)
   end
 
   def verify_calls(expect, called) do

@@ -15,4 +15,11 @@ defmodule AllowTest do
     1 = AllowTestMock.some_method(1,2,3)
     AllowTestMock.verify()
   end
+
+  test "allows a mock with a function based parameter match" do
+    AllowTestMock.setup()
+    AllowTestMock.allow(:some_method, fn([1,2,_]) -> true end, 1)
+    1 = AllowTestMock.some_method(1,2,3)
+    AllowTestMock.verify()
+  end
 end

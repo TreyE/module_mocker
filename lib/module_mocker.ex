@@ -9,7 +9,7 @@ defmodule ModuleMocker do
       end
 
       def init(args) do
-        {:ok, %{called: %{}, allows: %{}, expects: %{}}}
+        {:ok, %{called: %{}, allows: ModuleMocker.AllowedMethods.new(), expects: %{}}}
       end
 
       def handle_call(:verify, _from, state) do
