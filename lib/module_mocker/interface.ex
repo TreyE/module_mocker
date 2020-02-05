@@ -20,7 +20,11 @@ defmodule ModuleMocker.Interface do
       nil -> {:error, {:function_not_allowed, method}}
       arg_mapping ->
         case Map.has_key?(arg_mapping, {args}) do
-          false -> {:error, {:no_matching_call, method, args}}
+          false ->
+            case Map.has_key?(arg_mapping, {:any_args}) do
+              false -> {:error, {:no_matching_call, method, args}}
+              _  -> {:ok, Map.fetch!(arg_mapping, {:any_args})}
+            end
           _ -> {:ok, Map.fetch!(arg_mapping, {args})}
         end
     end
